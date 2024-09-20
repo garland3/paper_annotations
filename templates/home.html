@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processed Papers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .paper-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .paper-item {
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .paper-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .paper-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+        }
+        .paper-link:hover {
+            color: #2980b9;
+        }
+        .upload-container {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .upload-container h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .upload-box {
+            border: 2px dashed #3498db;
+            border-radius: 5px;
+            padding: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .upload-box.dragover {
+            background-color: #eaf6ff;
+        }
+        .upload-box input[type="file"] {
+            display: none;
+        }
+        .upload-box p {
+            margin: 0;
+            color: #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .status-message {
+            margin-top: 10px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Processed Papers</h1>
+    
+    <!-- Upload Paper Form -->
+    <div class="upload-container">
+        <h2>Upload a New Paper</h2>
+        <div class="upload-box" id="uploadBox">
+            <p>Drag & Drop your paper here or click to upload</p>
+            <input type="file" id="fileInput" name="file" required>
+        </div>
+        <button id="uploadButton" class="btn btn-primary">Upload Paper</button>
+        <div id="statusMessage" class="status-message" style="display: none;"></div>
+    </div>
+
+    <ul class="paper-list">
+        {% for paper in papers %}
+        <li class="paper-item">
+            <a href="/paper/{{ paper }}" class="paper-link">{{ paper }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadButton');
+        const statusMessage = document.getElementById('statusMessage');
+
+        uploadBox.addEventListener('click', () => fileInput.click());
+
+        uploadBox.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            uploadBox.classList.add('dragover');
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.classList.remove('dragover');
+        });
+
+        uploadBox.addEventListener('drop', (event) => {
+            event.preventDefault();
+            uploadBox.classList.remove('dragover');
+            fileInput.files = event.dataTransfer.files;
+        });
+
+        uploadButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            statusMessage.style.display = 'block';
+            statusMessage.textContent = 'Uploading paper...';
+
+            fetch('/upload_paper', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    statusMessage.textContent = 'Paper uploaded successfully! Processing may take a few minutes...';
+                } else {
+                    statusMessage.textContent = 'Upload failed.';
+                }
+                setTimeout(() => {
+                    statusMessage.textContent = 'Processing complete!'; // Update this based on actual processing status
+                    location.reload(); // Reload the page to see the new paper
+                }, 120000); // 2 minutes
+            })
+            .catch(error => {
+                console.error('Error uploading paper:', error);
+                statusMessage.textContent = 'Error uploading paper.';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    overflow: hidden; /* Add this */
+}
+
+.paper-panel, .annotations-panel {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.paper-panel {
+    flex: 3;
+    border-right: 1px solid #e0e0e0;
+    height: 100vh; /* Add this */
+    overflow-y: auto; /* Add this */
+    position: relative; /* Add this */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.annotations-panel {
+    flex: 1;
+    background-color: #f9f9f9;
+    min-width: 250px;
+    height: 100vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+#visibleAnnotations {
+    padding: 20px;
+}
+
+.annotation {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease;
+    position: absolute;
+    width: calc(100% - 40px); /* Adjust for padding */
+    left: 20px;
+}
+
+.paper-panel h1 {
+    margin-top: 0;
+    color: #333;
+}
+
+.paper-panel a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.paper-panel a:hover {
+    text-decoration: underline;
+}
+
+.paper-content {
+    line-height: 1.6;
+    color: #333;
+}
+
+.highlight {
+    background-color: #fff176;
+    cursor: pointer;
+    padding: 2px 0;
+    position: relative;
+    display: inline-block;
+}
+
+.annotation-bubble {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.annotation-bubble::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #ccc transparent;
+}
+
+.annotation-bubble p {
+    margin: 0 0 10px 0;
+}
+
+.annotation {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease;
+    position: absolute;
+    width: calc(100% - 40px); /* Adjust for padding */
+    left: 20px;
+}
+
+.annotation p {
+    margin: 0 0 10px 0;
+}
+
+.annotation button {
+    padding: 5px 10px;
+    font-size: 12px;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #e74c3c;
+    color: white;
+}
+
+.annotation button:hover {
+    background-color: #c0392b;
+}
+
+.annotation-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 5px;
+}
+
+.annotation-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+}
+
+.annotation-form button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s, color 0.3s;
+    white-space: nowrap;
+}
+
+.annotation-form button:hover {
+    background-color: #2980b9;
+}
+
+.annotation-form button:last-child {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.annotation-form button:last-child:hover {
+    background-color: #7f8c8d;
+}
+
+#clearAnnotations {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-top: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#clearAnnotations:hover {
+    background-color: #c0392b;
+}
+
+.temp-highlight {
+    background-color: #81d4fa;
+    padding: 2px 0;
+}
+
+.annotation-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .paper-panel, .annotations-panel {
+        flex: none;
+        width: 100%;
+    }
+    
+    .paper-panel {
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.annotation-form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.annotation-form button {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s, color 0.3s;
+    white-space: nowrap;
+}
+
+.api-config {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.config-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Remove or comment out this block
+.inline-annotation {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 0.9em;
+    padding: 2px 5px;
+    margin-top: 5px;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 100;
+}
+*/

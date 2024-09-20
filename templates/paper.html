@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ paper_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='markdown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='paper.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="paper-panel" id="paperPanel">
+            <h1>{{ paper_name }}</h1>
+            <div class="api-config">
+                <input type="password" id="apiKey" placeholder="Enter API Key" class="config-input">
+                <input type="text" id="apiUrl" placeholder="Enter API URL" class="config-input">
+                <input type="text" id="modelName" placeholder="Enter Model Name" class="config-input">
+                <button id="saveConfig" class="btn btn-primary">Save Configuration</button>
+            </div>
+            <div class="button-group">
+                <button onclick="window.location.href='/';" class="btn btn-primary">Home</button>
+                <button id="downloadAnnotations" class="btn btn-secondary">Download Annotations</button>
+                <input type="file" id="loadAnnotations" accept=".json" style="display: none;">
+                <button id="loadAnnotationsButton" class="btn btn-secondary">Load Annotations</button>
+                <button id="clearAnnotations" class="btn btn-danger">Clear All Annotations</button>
+            </div>
+            <hr>
+            <div class="paper-content markdown-body" id="paperContent">
+                {{ content | safe }}
+            </div>
+        </div>
+    </div>
+
+    <div id="annotationForm" class="annotation-form">
+        <textarea id="annotationText" rows="4" cols="50"></textarea>
+        <div class="annotation-form-buttons">
+            <button id="saveAnnotationBtn" class="btn btn-primary">Save (Ctrl+Enter)</button>
+            <button id="askAIBtn" class="btn btn-secondary">Ask AI</button>
+            <button id="cancelAnnotationBtn" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const paperName = "{{ paper_name }}";
+    </script>
+    <script type="module" src="{{ url_for('static', path='api.js') }}"></script>
+    <script type="module" src="{{ url_for('static', path='paper.js') }}"></script>
+</body>
+</html>
